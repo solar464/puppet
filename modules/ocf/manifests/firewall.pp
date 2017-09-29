@@ -1,6 +1,13 @@
 class ocf::firewall {
   include firewall
 
+  Firewall{
+    before  => Class['ocf::firewall::post'],
+    require => Class['ocf::firewall::pre'],
+  }
+
+  class { ['ocf::firewall::pre', 'ocf::firewall::post']:; }
+
   # One unpleasant thing about the puppetlabs-firewall module is that it
   # calls iptables-save, which saves all iptables rules when it runs,
   # including any transient rules added by Docker that happen to be
