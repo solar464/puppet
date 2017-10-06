@@ -1,5 +1,5 @@
 class ocf::firewall::pre {
-  Firewall{
+  Firewall {
     require => undef,
   }
   #Default rules
@@ -10,9 +10,9 @@ class ocf::firewall::pre {
   }
 
 
-  firewall  { '000 accept all icmp (IPv6)':
+  firewall { '000 accept all icmp (IPv6)':
     chain    => 'INPUT',
-    proto    => 'icmpv6',
+    proto    => 'ipv6-icmp',
     action   => 'accept',
     provider => 'ip6tables',
   }
@@ -26,7 +26,7 @@ class ocf::firewall::pre {
     },
   }
 
-  ocf::firewall::firewall46{ '002 allow RELATED and ESTABLISHED traffic':
+  ocf::firewall::firewall46 { '002 allow RELATED and ESTABLISHED traffic':
     opts => {
       'chain'  => 'INPUT',
       'proto'  => 'all',
@@ -39,13 +39,32 @@ class ocf::firewall::pre {
     source => '128.32.30.64/27',
     action => 'accept',
   }
-  ocf::firewall::firewall46{ '004 allow ssh from staff login server':
-    opts => {
-      'source' => 'admin',
-      'action' => 'accept',
-      'proto'  => 'tcp',
-    },
+  # allow from supernova and hypervisors, hard code the addresses in case of DNS malfunction
+  # ordering: [supernova, crisis, hal, jaws, pandemic, riptide]
+
+  $ssh_all = ['169.229.226.36', '169.229.226.7', '169.229.226.10', '169.229.226.12',
+            '169.229.226.14', '169.229.226.16']
+
+  $ssh_all_v6 = ['2607:f140:8801::1:36', '2607:f140:8801::1:7', '2607:f140:8801::1:10',
+              '2607:f140:8801::1:12', '2607:f140:8801::1:14', '2607:f140:8801::1:16']
+
+  $ssh_all.each |String $s| {
+    firewall { "004 allow ssh from supernova and hypervisors (${s}) (IPv4)":
+      chain  => 'INPUT',
+      action => 'accept',
+      source => $s,
+    }
   }
+
+  $ssh_all_v6.each |String $s| {
+    firewall { "004 allow ssh from supernova and hypervisors (${s}) (IPv6)":
+      chain    => 'INPUT',
+      action   => 'accept',
+      source   => $s,
+      provider => 'ip6tables',
+    }
+  }
+
   ocf::firewall::firewall46 { '005 allow munin connections':
     opts => {
       'action' => 'accept',
