@@ -34,7 +34,7 @@ class ocf::firewall::pre {
       'action' => 'accept',
     },
   }
-    
+
   firewall { '003 allow all SNS':
     source => '128.32.30.64/27',
     action => 'accept',
