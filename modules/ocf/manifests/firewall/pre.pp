@@ -2,15 +2,15 @@ class ocf::firewall::pre {
   Firewall {
     require => undef,
   }
+
   #Default rules
-  firewall  { '000 accept all icmp (IPv4)':
+  firewall  { '000 accept all icmp':
     chain  => 'INPUT',
     proto  => 'icmp',
     action => 'accept',
   }
 
-
-  firewall { '000 accept all icmp (IPv6)':
+  firewall { '000 accept all icmpv6':
     chain    => 'INPUT',
     proto    => 'ipv6-icmp',
     action   => 'accept',
