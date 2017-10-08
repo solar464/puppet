@@ -39,25 +39,26 @@ class ocf::firewall::pre {
     source => '128.32.30.64/27',
     action => 'accept',
   }
+
   # allow from supernova and hypervisors, hard code the addresses in case of DNS malfunction
   # ordering: [supernova, crisis, hal, jaws, pandemic, riptide]
 
-  $ssh_all = ['169.229.226.36', '169.229.226.7', '169.229.226.10', '169.229.226.12',
-            '169.229.226.14', '169.229.226.16']
+  $allow_all = ['169.229.226.36', '169.229.226.7', '169.229.226.10', '169.229.226.12',
+                '169.229.226.14', '169.229.226.16']
 
-  $ssh_all_v6 = ['2607:f140:8801::1:36', '2607:f140:8801::1:7', '2607:f140:8801::1:10',
-              '2607:f140:8801::1:12', '2607:f140:8801::1:14', '2607:f140:8801::1:16']
+  $allow_all_v6 = ['2607:f140:8801::1:36', '2607:f140:8801::1:7', '2607:f140:8801::1:10',
+                    '2607:f140:8801::1:12', '2607:f140:8801::1:14', '2607:f140:8801::1:16']
 
-  $ssh_all.each |String $s| {
-    firewall { "004 allow ssh from supernova and hypervisors (${s}) (IPv4)":
+  $allow_all.each |String $s| {
+    firewall { "004 allow all from supernova and hypervisors (${s})":
       chain  => 'INPUT',
       action => 'accept',
       source => $s,
     }
   }
 
-  $ssh_all_v6.each |String $s| {
-    firewall { "004 allow ssh from supernova and hypervisors (${s}) (IPv6)":
+  $allow_all_v6.each |String $s| {
+    firewall { "004 allow all from supernova and hypervisors (${s})":
       chain    => 'INPUT',
       action   => 'accept',
       source   => $s,
