@@ -66,7 +66,24 @@ class ocf::firewall::pre {
     }
   }
 
-  ocf::firewall::firewall46 { '005 allow munin connections':
+  firewall { '005 allow ssh from desktops (IPv4)':
+    chain     => 'INPUT',
+    src_range => '169.229.226.100-169.229.226.139',
+    proto     => 'tcp',
+    dport     => 22,
+    action    => 'accept',
+  }
+
+  firewall { '005 allow ssh from desktops (IPv6)':
+    provider  => 'ip6tables',
+    chain     => 'INPUT',
+    src_range => '2607:f140:8801::1:100-2607:f140:8801::1:139',
+    proto     => 'tcp',
+    dport     => 22,
+    action    => 'accept',
+  }
+
+  ocf::firewall::firewall46 { '006 allow munin connections':
     opts => {
       'action' => 'accept',
       'dport'  => 'munin',
