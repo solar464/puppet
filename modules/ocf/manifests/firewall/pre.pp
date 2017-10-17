@@ -1,43 +1,49 @@
 class ocf::firewall::pre {
-  Firewall {
+  $firewall_defaults = {
     require => undef,
   }
 
-  #Default rules
-  firewall  { '000 accept all icmp':
-    chain  => 'INPUT',
-    proto  => 'icmp',
-    action => 'accept',
+  firewall {
+    default:
+      * => $firewall_defaults;
+
+    '000 accept all icmp':
+      chain  => 'INPUT',
+      proto  => 'icmp',
+      action => 'accept';
+
+    '000 accept all icmpv6':
+      chain    => 'INPUT',
+      proto    => 'ipv6-icmp',
+      action   => 'accept',
+      provider => 'ip6tables';
   }
 
-  firewall { '000 accept all icmpv6':
-    chain    => 'INPUT',
-    proto    => 'ipv6-icmp',
-    action   => 'accept',
-    provider => 'ip6tables',
-  }
+  ocf::firewall::firewall46 {
+    default:
+      * => $firewall_defaults;
 
-  ocf::firewall::firewall46 { '001 accept all to lo interface':
-    opts => {
-      'chain'   => 'INPUT',
-      'proto'   => 'all',
-      'iniface' => 'lo',
-      'action'  => 'accept',
-    },
-  }
+    '001 accept all to lo interface':
+      opts => {
+        'chain'   => 'INPUT',
+        'proto'   => 'all',
+        'iniface' => 'lo',
+        'action'  => 'accept',
+      };
 
-  ocf::firewall::firewall46 { '002 allow RELATED and ESTABLISHED traffic':
-    opts => {
-      'chain'  => 'INPUT',
-      'proto'  => 'all',
-      'state'  => ['RELATED', 'ESTABLISHED'],
-      'action' => 'accept',
-    },
+    '002 allow RELATED and ESTABLISHED traffic':
+      opts => {
+        'chain'  => 'INPUT',
+        'proto'  => 'all',
+        'state'  => ['RELATED', 'ESTABLISHED'],
+        'action' => 'accept',
+      };
   }
 
   firewall { '003 allow all SNS':
     source => '128.32.30.64/27',
     action => 'accept',
+    *      => $firewall_defaults,
   }
 
   # allow from supernova and hypervisors, hard code the addresses in case of DNS malfunction
@@ -54,6 +60,7 @@ class ocf::firewall::pre {
       chain  => 'INPUT',
       action => 'accept',
       source => $s,
+      *      => $firewall_defaults,
     }
   }
 
@@ -63,27 +70,32 @@ class ocf::firewall::pre {
       action   => 'accept',
       source   => $s,
       provider => 'ip6tables',
+      *        => $firewall_defaults,
     }
   }
 
-  firewall { '005 allow ssh from desktops (IPv4)':
-    chain     => 'INPUT',
-    src_range => '169.229.226.100-169.229.226.139',
-    proto     => 'tcp',
-    dport     => 22,
-    action    => 'accept',
-  }
+  firewall {
+    default:
+      * => $firewall_defaults;
 
-  firewall { '005 allow ssh from desktops (IPv6)':
-    provider  => 'ip6tables',
-    chain     => 'INPUT',
-    src_range => '2607:f140:8801::1:100-2607:f140:8801::1:139',
-    proto     => 'tcp',
-    dport     => 22,
-    action    => 'accept',
+    '005 allow ssh from desktops (IPv4)':
+      chain     => 'INPUT',
+      src_range => '169.229.226.100-169.229.226.139',
+      proto     => 'tcp',
+      dport     => 22,
+      action    => 'accept';
+
+    '005 allow ssh from desktops (IPv6)':
+      provider  => 'ip6tables',
+      chain     => 'INPUT',
+      src_range => '2607:f140:8801::1:100-2607:f140:8801::1:139',
+      proto     => 'tcp',
+      dport     => 22,
+      action    => 'accept';
   }
 
   ocf::firewall::firewall46 { '006 allow munin connections':
+    *    => $firewall_defaults,
     opts => {
       'action' => 'accept',
       'dport'  => 'munin',
