@@ -62,7 +62,7 @@ class ocf_dhcp {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => ['tcp', 'udp'],
-        dport  => 53,
+        dport  => 'domain',
         action => 'accept',
       };
   }
@@ -71,7 +71,7 @@ class ocf_dhcp {
   firewall { '101 allow bootps':
     chain  => 'PUPPET-INPUT',
     proto  => 'udp',
-    dport  => 67,
+    dport  => 'bootps',
     action => 'accept',
   }
 
@@ -81,7 +81,7 @@ class ocf_dhcp {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'udp',
-        dport  => 69,
+        dport  => 'tftp',
         action => 'accept',
       };
   }
@@ -91,7 +91,7 @@ class ocf_dhcp {
     provider => 'ip6tables',
     chain    => 'PUPPET-INPUT',
     proto    => 'udp',
-    dport    => 547,
+    dport    => 'dhcpv6-server',
     action   => 'accept',
   }
 }
