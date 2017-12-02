@@ -72,7 +72,7 @@ class ocf_kerberos {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => '88',
+        dport  => 88,
         action => 'accept',
       };
   }
@@ -82,7 +82,7 @@ class ocf_kerberos {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => '464',
+        dport  => 464,
         action => 'accept',
       };
   }
@@ -92,7 +92,7 @@ class ocf_kerberos {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => '749',
+        dport  => 749,
         action => 'accept',
       };
   }

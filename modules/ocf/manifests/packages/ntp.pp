@@ -15,7 +15,7 @@ class ocf::packages::ntp($master = false, $peers = []) {
         opts => {
           chain  => 'PUPPET-INPUT',
           proto  => ['tcp', 'udp'],
-          dport  => '123',
+          dport  => 123,
           action => 'accept',
         };
     }

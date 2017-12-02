@@ -5,7 +5,7 @@ class ocf::firewall::allow_http {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => '443',
+        dport  => 443,
         action => 'accept',
       };
 
@@ -13,7 +13,7 @@ class ocf::firewall::allow_http {
       opts => {
         chain  => 'PUPPET-INPUT',
         proto  => 'tcp',
-        dport  => '80',
+        dport  => 80,
         action => 'accept',
       };
   }
