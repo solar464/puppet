@@ -20,7 +20,7 @@ class ocf_irc {
     opts => {
       chain  => 'PUPPET-INPUT',
       proto  => 'tcp',
-      dport  => 'ircs-u',
+      dport  => '6697',
       action => 'accept',
     };
   }
