@@ -54,34 +54,12 @@ class ocf_dhcp {
       require => File['/usr/local/bin/lab-wakeup'];
   }
 
-  # Allow DNS
-  ocf::firewall::firewall46 {
-    '101 allow domain':
-      opts => {
-        chain  => 'PUPPET-INPUT',
-        proto  => ['tcp', 'udp'],
-        dport  => 53,
-        action => 'accept',
-      };
-  }
-
   # Allow BOOTP (IPv4 only)
   firewall { '101 allow bootps':
     chain  => 'PUPPET-INPUT',
     proto  => 'udp',
     dport  => 67,
     action => 'accept',
-  }
-
-  # Allow TFTP
-  ocf::firewall::firewall46 {
-    '101 allow tftp':
-      opts => {
-        chain  => 'PUPPET-INPUT',
-        proto  => 'udp',
-        dport  => 69,
-        action => 'accept',
-      };
   }
 
   # Allow DHCP Server (IPv6 only)
