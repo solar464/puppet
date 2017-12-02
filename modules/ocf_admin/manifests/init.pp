@@ -40,8 +40,6 @@ class ocf_admin {
       mode   => '0640';
   }
 
-  # Firewall Rules #
-
   # Allow Redis
   ocf::firewall::firewall46 {
     '101 allow redis':

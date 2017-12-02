@@ -64,8 +64,6 @@ class ocf_kerberos {
     require => File['/usr/local/sbin/kerberos-git-backup'];
   }
 
-  # Firewall Rules #
-
   # Allow Kerberos
   ocf::firewall::firewall46 {
     '101 allow kerberos':

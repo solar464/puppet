@@ -23,10 +23,10 @@ class ocf_desktop {
   include ocf_desktop::wireshark
   include ocf_desktop::xsession
 
-  # Firewall Rules #
+  # Allow HTTP and HTTPS
   include ocf::firewall::allow_http
 
-  # allow steam login and steam content
+  # Allow Steam login and Steam content
   ocf::firewall::firewall46 {
     '101 allow steam (tcp)':
       opts => {

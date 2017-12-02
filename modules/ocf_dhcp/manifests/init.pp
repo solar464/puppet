@@ -54,8 +54,6 @@ class ocf_dhcp {
       require => File['/usr/local/bin/lab-wakeup'];
   }
 
-  # Firewall Rules #
-
   # Allow DNS
   ocf::firewall::firewall46 {
     '101 allow domain':

@@ -11,7 +11,7 @@ class ocf_irc {
     require => [Package['inspircd'], Package['ssl-cert']],
   }
 
-  # Firewall Rules
+  # Allow HTTP and HTTPS
   include ocf::firewall::allow_http
 
   # Allow IRC server (SSL only)
