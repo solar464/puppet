@@ -99,18 +99,27 @@ class ocf::firewall::post {
       action    => 'accept';
   }
 
-  # Drop packets on the primary network inteface that are not whitelisted
+  # These rules intentionally apply only to addresses within our network as a reminder that
+  # it is the external firewall's job to filter external packets.
+
   # TODO: eliminate this if statement once testing is complete
   if !$ocf::firewall::allow_other_traffic {
-    ocf::firewall::firewall46 {
-      '999 drop unrecognized input packets on primary interface':
-        opts   => {
-          chain  => 'PUPPET-INPUT',
-          proto  => 'all',
-          src    => ['tcp', 'udp'],
-          action => 'drop',
-        },
-        before => undef,
+
+    firewall {
+      '999 drop unrecognized packets from within OCF network (IPv4)':
+        chain     => 'PUPPET-INPUT',
+        src_range => '169.229.226.0/24',
+        proto     => ['tcp', 'udp'],
+        action    => 'drop',
+        before    => undef;
+
+      '999 drop unrecognized packets from within OCF network (IPv6)':
+        provider  => 'ip6tables',
+        chain     => 'PUPPET-INPUT',
+        src_range => '2607:f140:8801::/64',
+        proto     => ['tcp', 'udp'],
+        action    => 'drop',
+        before    => undef;
     }
   }
 }
