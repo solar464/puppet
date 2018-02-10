@@ -4,7 +4,6 @@ class ocf_kvm($group = 'root') {
   include ocf::ipmi
   include ocf::tmpfs
 
-
   # install kvm, libvirt, lvm, bridge networking, IPMI
   package {
     # KVM/virt tools
@@ -53,5 +52,4 @@ class ocf_kvm($group = 'root') {
       owner     => 'root',
       show_diff => false;
   }
-
 }
