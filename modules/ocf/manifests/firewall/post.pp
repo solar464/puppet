@@ -75,12 +75,13 @@ class ocf::firewall::post {
 
   $drop_all.each |String $s| {
     ocf::firewall::firewall46 { "997 drop internal zone exception, (${s})":
-      opts  => {
+      opts   => {
         chain  => 'PUPPET-INPUT',
         proto  => ['tcp', 'udp'],
         action => 'drop',
-        source => $s
-      }
+        source => $s,
+      },
+      before => undef,
     }
   }
 
@@ -92,14 +93,16 @@ class ocf::firewall::post {
       chain     => 'PUPPET-INPUT',
       src_range => $internal_zone_range_4,
       proto     => ['tcp', 'udp'],
-      action    => 'accept';
+      action    => 'accept',
+      before    => undef;
 
     '998 allow from internal zone (IPv6)':
       provider  => 'ip6tables',
       chain     => 'PUPPET-INPUT',
       src_range => $internal_zone_range_6,
       proto     => ['tcp', 'udp'],
-      action    => 'accept';
+      action    => 'accept',
+      before    => undef;
   }
 
   # These rules intentionally apply only to addresses within our network as a reminder that
