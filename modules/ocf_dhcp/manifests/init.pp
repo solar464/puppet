@@ -67,7 +67,7 @@ class ocf_dhcp {
     provider => 'ip6tables',
     chain    => 'PUPPET-INPUT',
     proto    => 'udp',
-    dport    => 'dhcpv6-server',
+    dport    => 547,
     action   => 'accept',
   }
 }
